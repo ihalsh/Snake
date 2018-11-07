@@ -1,4 +1,4 @@
-package com.packt.snake
+package com.packt.snake.utils
 
 class Constants {
     companion object {

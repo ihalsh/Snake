@@ -2,13 +2,16 @@ package com.packt.snake
 
 import com.badlogic.gdx.graphics.Color.BLACK
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.packt.snake.entities.Snake
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.graphics.use
 
 class GameScreen : KtxScreen {
+
     private val batch = SpriteBatch()
     private val snake = Snake()
+
 
     override fun render(delta: Float) {
 
