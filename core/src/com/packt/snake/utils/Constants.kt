@@ -7,7 +7,7 @@ class Constants {
     companion object {
 
         //Snake
-        const val MOVE_TIME = 0.5f
+        const val MOVE_TIME = 0.25f
         const val SNAKE_MOVEMENT = 32f
         const val RIGHT = 0
         const val LEFT = 1
