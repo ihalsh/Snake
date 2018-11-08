@@ -12,16 +12,16 @@ class GameScreen : KtxScreen {
 
     private val batch = SpriteBatch()
     private val snake = Snake()
-    private val apple = Apple()
+    private val apple = Apple(snake = snake)
 
 
     override fun render(delta: Float) {
 
         //update snake
-        snake.update(delta)
+        snake.update(delta, apple)
 
         //update apple
-        apple.update(snake.position)
+        apple.update(snake)
 
         clearScreen(BLACK.r, BLACK.g, BLACK.b)
 

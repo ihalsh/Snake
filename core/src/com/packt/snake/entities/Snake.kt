@@ -2,25 +2,29 @@ package com.packt.snake.entities
 
 import com.badlogic.gdx.Gdx.*
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.Array
 import com.packt.snake.utils.Constants
 import com.packt.snake.utils.Constants.Companion.DOWN
 import com.packt.snake.utils.Constants.Companion.LEFT
 import com.packt.snake.utils.Constants.Companion.MOVE_TIME
 import com.packt.snake.utils.Constants.Companion.RIGHT
+import com.packt.snake.utils.Constants.Companion.SNAKE_BODY
+import com.packt.snake.utils.Constants.Companion.SNAKE_HEAD
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.UP
+import ktx.log.info
+
 
 class Snake(var position: Vector2 = Vector2(),
             private var snakeDirection: Int = RIGHT) {
 
-    private val snakeHead = Texture(files.internal("snakehead.png"))
-    private val snakeBody = Texture(files.internal("snakebody.png"))
     private var timer = Constants.MOVE_TIME
+    val bodyParts = Array<BodyPart>()
+    private var previousPosition = Vector2()
 
-    fun update(delta: Float) {
+    fun update(delta: Float, apple: Apple) {
 
         //Update time
         timer -= delta
@@ -30,19 +34,39 @@ class Snake(var position: Vector2 = Vector2(),
 
         if (timer <= 0) {
             timer = MOVE_TIME
+            previousPosition.set(position)
             when (snakeDirection) {
                 RIGHT -> position.x += SNAKE_MOVEMENT
                 LEFT -> position.x -= SNAKE_MOVEMENT
                 UP -> position.y += SNAKE_MOVEMENT
                 DOWN -> position.y -= SNAKE_MOVEMENT
             }
+            updateBodyPartsPosition(previousPosition)
             checkForOutOfBounds()
         }
+        checkAppleCollision(position, apple)
     }
 
     fun render(batch: SpriteBatch) {
+        batch.draw(SNAKE_HEAD, position.x, position.y)
+        for (bodyPart in bodyParts) bodyPart.render(batch)
+    }
 
-        batch.draw(snakeHead, position.x, position.y)
+    private fun checkAppleCollision(position: Vector2, apple: Apple) {
+
+        if (apple.appleAvailable && apple.position.x == position.x && apple.position.y == position.y) {
+            val bodyPart = BodyPart()
+            bodyPart.updateBodyPosition(position)
+            bodyParts.insert(0, bodyPart)
+        }
+    }
+
+    private fun updateBodyPartsPosition(previousPosition: Vector2) {
+        if (bodyParts.size > 0) {
+            val bodyPart = bodyParts.removeIndex(0)
+            bodyPart.updateBodyPosition(previousPosition)
+            bodyParts.add(bodyPart)
+        }
     }
 
     private fun checkForOutOfBounds() {
@@ -58,6 +82,18 @@ class Snake(var position: Vector2 = Vector2(),
             input.isKeyPressed(Input.Keys.RIGHT) -> snakeDirection = RIGHT
             input.isKeyPressed(Input.Keys.UP) -> snakeDirection = UP
             input.isKeyPressed(Input.Keys.DOWN) -> snakeDirection = DOWN
+        }
+    }
+
+    inner class BodyPart(val bodyPartPosition: Vector2 = Vector2()) {
+
+        fun updateBodyPosition(position: Vector2) {
+            bodyPartPosition.set(position)
+        }
+
+        fun render(batch: SpriteBatch) {
+            if (bodyPartPosition != position)
+                batch.draw(SNAKE_BODY, bodyPartPosition.x, bodyPartPosition.y)
         }
     }
 }
