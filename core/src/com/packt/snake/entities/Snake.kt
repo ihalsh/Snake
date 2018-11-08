@@ -13,7 +13,7 @@ import com.packt.snake.utils.Constants.Companion.RIGHT
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.UP
 
-class Snake(private var position: Vector2 = Vector2(),
+class Snake(var position: Vector2 = Vector2(),
             private var snakeDirection: Int = RIGHT) {
 
     private val snakeHead = Texture(files.internal("snakehead.png"))
