@@ -37,14 +37,13 @@ class GameScreen : KtxScreen {
             end()
         }
 
-
         //update snake
         snake.update(delta, apple)
 
         //update apple
         apple.update(snake)
 
-
+        //render snake and the apple
         batch.use {
             snake.render(it)
             apple.render(it)

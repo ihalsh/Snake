@@ -15,6 +15,9 @@ import com.packt.snake.utils.Constants.Companion.SNAKE_BODY
 import com.packt.snake.utils.Constants.Companion.SNAKE_HEAD
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.UP
+import com.packt.snake.entities.Snake.BodyPart
+
+
 
 
 class Snake(var position: Vector2 = Vector2(),
@@ -24,6 +27,7 @@ class Snake(var position: Vector2 = Vector2(),
     val bodyParts = Array<BodyPart>()
     private var previousPosition = Vector2()
     private var directionSet = false
+    private var hasHit = false
 
     fun update(delta: Float, apple: Apple) {
 
@@ -33,7 +37,7 @@ class Snake(var position: Vector2 = Vector2(),
         //Update direction
         queryInput()
 
-        if (timer <= 0) {
+        if (timer <= 0 && !hasHit) {
             timer = MOVE_TIME
             previousPosition.set(position)
             when (snakeDirection) {
@@ -44,6 +48,7 @@ class Snake(var position: Vector2 = Vector2(),
             }
             updateBodyPartsPosition(previousPosition)
             checkForOutOfBounds()
+            checkSnakeBodyCollision()
             directionSet = false
         }
         checkAppleCollision(position, apple)
@@ -76,6 +81,11 @@ class Snake(var position: Vector2 = Vector2(),
         if (position.x < 0) position.x = graphics.width - SNAKE_MOVEMENT
         if (position.y >= graphics.height) position.y = 0f
         if (position.y < 0) position.y = graphics.height - SNAKE_MOVEMENT
+    }
+
+    private fun checkSnakeBodyCollision() {
+        for (bodyPart in bodyParts)
+            if (bodyPart.bodyPartPosition == position) hasHit = true
     }
 
 //----DIRECTION UPDATE START
