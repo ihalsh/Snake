@@ -1,6 +1,7 @@
 package com.packt.snake.entities
 
-import com.badlogic.gdx.Gdx.*
+import com.badlogic.gdx.Gdx.graphics
+import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
@@ -14,7 +15,6 @@ import com.packt.snake.utils.Constants.Companion.SNAKE_BODY
 import com.packt.snake.utils.Constants.Companion.SNAKE_HEAD
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.UP
-import ktx.log.info
 
 
 class Snake(var position: Vector2 = Vector2(),
@@ -23,6 +23,7 @@ class Snake(var position: Vector2 = Vector2(),
     private var timer = Constants.MOVE_TIME
     val bodyParts = Array<BodyPart>()
     private var previousPosition = Vector2()
+    private var directionSet = false
 
     fun update(delta: Float, apple: Apple) {
 
@@ -43,6 +44,7 @@ class Snake(var position: Vector2 = Vector2(),
             }
             updateBodyPartsPosition(previousPosition)
             checkForOutOfBounds()
+            directionSet = false
         }
         checkAppleCollision(position, apple)
     }
@@ -76,14 +78,35 @@ class Snake(var position: Vector2 = Vector2(),
         if (position.y < 0) position.y = graphics.height - SNAKE_MOVEMENT
     }
 
+//----DIRECTION UPDATE START
+
     private fun queryInput() {
         when {
-            input.isKeyPressed(Input.Keys.LEFT) -> snakeDirection = LEFT
-            input.isKeyPressed(Input.Keys.RIGHT) -> snakeDirection = RIGHT
-            input.isKeyPressed(Input.Keys.UP) -> snakeDirection = UP
-            input.isKeyPressed(Input.Keys.DOWN) -> snakeDirection = DOWN
+            input.isKeyPressed(Input.Keys.LEFT) -> updateDirection(LEFT)
+            input.isKeyPressed(Input.Keys.RIGHT) -> updateDirection(RIGHT)
+            input.isKeyPressed(Input.Keys.UP) -> updateDirection(UP)
+            input.isKeyPressed(Input.Keys.DOWN) -> updateDirection(DOWN)
         }
     }
+
+    private fun updateDirection(newSnakeDirection: Int) {
+        if (!directionSet && snakeDirection != newSnakeDirection) {
+            directionSet = true
+            when (newSnakeDirection) {
+                LEFT -> updateIfNotOppositeDirection(newSnakeDirection, RIGHT)
+                RIGHT -> updateIfNotOppositeDirection(newSnakeDirection, LEFT)
+                UP -> updateIfNotOppositeDirection(newSnakeDirection, DOWN)
+                DOWN -> updateIfNotOppositeDirection(newSnakeDirection, UP)
+            }
+        }
+    }
+
+    private fun updateIfNotOppositeDirection(newSnakeDirection: Int, oppositeDirection: Int) {
+        if (snakeDirection != oppositeDirection || bodyParts.size == 0)
+            snakeDirection = newSnakeDirection
+    }
+
+//----DIRECTION UPDATE END
 
     inner class BodyPart(val bodyPartPosition: Vector2 = Vector2()) {
 
