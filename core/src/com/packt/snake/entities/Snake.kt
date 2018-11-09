@@ -10,6 +10,7 @@ import com.packt.snake.utils.Constants
 import com.packt.snake.utils.Constants.Companion.DOWN
 import com.packt.snake.utils.Constants.Companion.LEFT
 import com.packt.snake.utils.Constants.Companion.MOVE_TIME
+import com.packt.snake.utils.Constants.Companion.POINTS_PER_APPLE
 import com.packt.snake.utils.Constants.Companion.RIGHT
 import com.packt.snake.utils.Constants.Companion.SNAKE_BODY
 import com.packt.snake.utils.Constants.Companion.SNAKE_HEAD
@@ -17,6 +18,7 @@ import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.STATE.GAME_OVER
 import com.packt.snake.utils.Constants.Companion.STATE.PLAYING
 import com.packt.snake.utils.Constants.Companion.UP
+import ktx.log.info
 
 class Snake(var position: Vector2 = Vector2(),
             var snakeDirection: Int = RIGHT) {
@@ -26,6 +28,7 @@ class Snake(var position: Vector2 = Vector2(),
     private var previousPosition = Vector2()
     private var directionSet = false
     var gameState = PLAYING
+    var score = 0
 
     fun update(delta: Float, apple: Apple) {
 
@@ -63,6 +66,7 @@ class Snake(var position: Vector2 = Vector2(),
             val bodyPart = BodyPart()
             bodyPart.updateBodyPosition(position)
             bodyParts.insert(0, bodyPart)
+            score += POINTS_PER_APPLE
         }
     }
 

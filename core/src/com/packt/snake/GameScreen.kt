@@ -51,6 +51,13 @@ class GameScreen : KtxScreen {
                 batch.use {
                     snake.render(it)
                     apple.render(it)
+                    font.draw(it,
+                            "Score: ${snake.score}",
+                            SNAKE_MOVEMENT / 4,
+                            Gdx.graphics.height.toFloat() - SNAKE_MOVEMENT / 4,
+                            0f,
+                            Align.left,
+                            false)
                 }
             }
 
@@ -59,6 +66,13 @@ class GameScreen : KtxScreen {
                 batch.use {
                     snake.render(it)
                     apple.render(it)
+                    font.draw(it,
+                            "Score: ${snake.score}",
+                            SNAKE_MOVEMENT / 4,
+                            Gdx.graphics.height.toFloat() - SNAKE_MOVEMENT / 4,
+                            0f,
+                            Align.left,
+                            false)
                     font.draw(it,
                             GAME_OVER_TEXT,
                             (Gdx.graphics.width / 2).toFloat(),
@@ -83,6 +97,7 @@ class GameScreen : KtxScreen {
             snakeDirection = RIGHT
             bodyParts.clear()
             gameState = PLAYING
+            score = 0
         }
         apple.appleAvailable = false
     }

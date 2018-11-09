@@ -16,6 +16,7 @@ class Constants {
         const val UP = 2
         const val DOWN = 3
         val SNAKE_HEAD = Texture(Gdx.files.internal("snakehead.png"))
+        const val POINTS_PER_APPLE = 20
 
         //Snake body
         val SNAKE_BODY = Texture(Gdx.files.internal("snakebody.png"))
