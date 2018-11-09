@@ -20,5 +20,9 @@ class Constants {
 
         //Apple
         val APPLE = Texture(Gdx.files.internal("apple.png"))
+
+        enum class STATE {
+            PLAYING, GAME_OVER
+        }
     }
 }

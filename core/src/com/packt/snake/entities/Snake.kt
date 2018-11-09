@@ -14,11 +14,9 @@ import com.packt.snake.utils.Constants.Companion.RIGHT
 import com.packt.snake.utils.Constants.Companion.SNAKE_BODY
 import com.packt.snake.utils.Constants.Companion.SNAKE_HEAD
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
+import com.packt.snake.utils.Constants.Companion.STATE.GAME_OVER
+import com.packt.snake.utils.Constants.Companion.STATE.PLAYING
 import com.packt.snake.utils.Constants.Companion.UP
-import com.packt.snake.entities.Snake.BodyPart
-
-
-
 
 class Snake(var position: Vector2 = Vector2(),
             private var snakeDirection: Int = RIGHT) {
@@ -27,7 +25,7 @@ class Snake(var position: Vector2 = Vector2(),
     val bodyParts = Array<BodyPart>()
     private var previousPosition = Vector2()
     private var directionSet = false
-    private var hasHit = false
+    var gameState = PLAYING
 
     fun update(delta: Float, apple: Apple) {
 
@@ -37,7 +35,7 @@ class Snake(var position: Vector2 = Vector2(),
         //Update direction
         queryInput()
 
-        if (timer <= 0 && !hasHit) {
+        if (timer <= 0) {
             timer = MOVE_TIME
             previousPosition.set(position)
             when (snakeDirection) {
@@ -85,7 +83,9 @@ class Snake(var position: Vector2 = Vector2(),
 
     private fun checkSnakeBodyCollision() {
         for (bodyPart in bodyParts)
-            if (bodyPart.bodyPartPosition == position) hasHit = true
+            if (bodyPart.bodyPartPosition == position) {
+                gameState = GAME_OVER
+            }
     }
 
 //----DIRECTION UPDATE START
