@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture
 class Constants {
     companion object {
 
-        const val GAME_OVER_TEXT = "Game Over!"
+        const val GAME_OVER_TEXT = "Game Over...\n Tap SPACE to restart!"
 
         //Snake
         const val MOVE_TIME = 0.25f

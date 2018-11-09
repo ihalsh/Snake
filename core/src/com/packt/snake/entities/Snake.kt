@@ -19,7 +19,7 @@ import com.packt.snake.utils.Constants.Companion.STATE.PLAYING
 import com.packt.snake.utils.Constants.Companion.UP
 
 class Snake(var position: Vector2 = Vector2(),
-            private var snakeDirection: Int = RIGHT) {
+            var snakeDirection: Int = RIGHT) {
 
     private var timer = Constants.MOVE_TIME
     val bodyParts = Array<BodyPart>()
@@ -46,8 +46,8 @@ class Snake(var position: Vector2 = Vector2(),
             }
             updateBodyPartsPosition(previousPosition)
             checkForOutOfBounds()
-            checkSnakeBodyCollision()
             directionSet = false
+            checkSnakeBodyCollision()
         }
         checkAppleCollision(position, apple)
     }

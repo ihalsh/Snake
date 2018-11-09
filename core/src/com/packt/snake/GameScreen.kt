@@ -1,16 +1,22 @@
 package com.packt.snake
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Gdx.input
+import com.badlogic.gdx.Input
+import com.badlogic.gdx.Input.Keys.SPACE
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Color.BLACK
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Align
 import com.packt.snake.entities.Apple
 import com.packt.snake.entities.Snake
+import com.packt.snake.utils.Constants
 import com.packt.snake.utils.Constants.Companion.GAME_OVER_TEXT
+import com.packt.snake.utils.Constants.Companion.RIGHT
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.STATE.GAME_OVER
 import com.packt.snake.utils.Constants.Companion.STATE.PLAYING
@@ -40,26 +46,45 @@ class GameScreen : KtxScreen {
 
                 //Draw grid
 //                drawGrid()
+
+                //render snake and the apple
+                batch.use {
+                    snake.render(it)
+                    apple.render(it)
+                }
             }
 
             GAME_OVER -> {
                 layout.setText(font, GAME_OVER_TEXT)
                 batch.use {
+                    snake.render(it)
+                    apple.render(it)
                     font.draw(it,
                             GAME_OVER_TEXT,
                             (Gdx.graphics.width / 2).toFloat(),
-                            (Gdx.graphics.height / 2).toFloat(),
+                            Gdx.graphics.height / 2 + layout.height,
                             0f,
                             Align.center,
                             false)
                 }
+                checkForRestart()
             }
         }
-        //render snake and the apple
-        batch.use {
-            snake.render(it)
-            apple.render(it)
+    }
+
+    private fun checkForRestart() {
+        if (input.isKeyPressed(SPACE)) doRestart()
+    }
+
+    private fun doRestart() {
+
+        with(snake) {
+            position = Vector2()
+            snakeDirection = RIGHT
+            bodyParts.clear()
+            gameState = PLAYING
         }
+        apple.appleAvailable = false
     }
 
     private fun drawGrid() {
