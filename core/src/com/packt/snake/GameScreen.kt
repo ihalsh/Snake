@@ -3,10 +3,14 @@ package com.packt.snake
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Color.BLACK
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.utils.Align
 import com.packt.snake.entities.Apple
 import com.packt.snake.entities.Snake
+import com.packt.snake.utils.Constants.Companion.GAME_OVER_TEXT
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.STATE.GAME_OVER
 import com.packt.snake.utils.Constants.Companion.STATE.PLAYING
@@ -18,6 +22,8 @@ class GameScreen : KtxScreen {
 
     private val batch = SpriteBatch()
     private val renderer = ShapeRenderer()
+    private val font = BitmapFont()
+    private val layout = GlyphLayout()
     private val snake = Snake()
     private val apple = Apple(snake = snake)
 
@@ -31,13 +37,32 @@ class GameScreen : KtxScreen {
                 snake.update(delta, apple)
                 //update apple
                 apple.update(snake)
+
+                //Draw grid
+//                drawGrid()
             }
 
             GAME_OVER -> {
-            } //TODO
+                layout.setText(font, GAME_OVER_TEXT)
+                batch.use {
+                    font.draw(it,
+                            GAME_OVER_TEXT,
+                            (Gdx.graphics.width / 2).toFloat(),
+                            (Gdx.graphics.height / 2).toFloat(),
+                            0f,
+                            Align.center,
+                            false)
+                }
+            }
         }
+        //render snake and the apple
+        batch.use {
+            snake.render(it)
+            apple.render(it)
+        }
+    }
 
-        //Draw grid
+    private fun drawGrid() {
         with(renderer) {
             setAutoShapeType(true)
             begin(ShapeRenderer.ShapeType.Line)
@@ -48,12 +73,6 @@ class GameScreen : KtxScreen {
                 }
             }
             end()
-        }
-
-        //render snake and the apple
-        batch.use {
-            snake.render(it)
-            apple.render(it)
         }
     }
 
