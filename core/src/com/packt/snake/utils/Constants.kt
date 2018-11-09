@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture
 class Constants {
     companion object {
 
+        //General
+        const val WORLD_WIDTH = 640f
+        const val WORLD_HEIGHT = 480f
         const val GAME_OVER_TEXT = "Game Over...\n Tap SPACE to restart!"
 
         //Snake

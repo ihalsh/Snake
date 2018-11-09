@@ -1,11 +1,11 @@
 package com.packt.snake.entities
 
-import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.input
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Array
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.packt.snake.utils.Constants
 import com.packt.snake.utils.Constants.Companion.DOWN
 import com.packt.snake.utils.Constants.Companion.LEFT
@@ -18,10 +18,10 @@ import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 import com.packt.snake.utils.Constants.Companion.STATE.GAME_OVER
 import com.packt.snake.utils.Constants.Companion.STATE.PLAYING
 import com.packt.snake.utils.Constants.Companion.UP
-import ktx.log.info
 
 class Snake(var position: Vector2 = Vector2(),
-            var snakeDirection: Int = RIGHT) {
+            var snakeDirection: Int = RIGHT,
+            private val viewport: FitViewport) {
 
     private var timer = Constants.MOVE_TIME
     val bodyParts = Array<BodyPart>()
@@ -79,10 +79,10 @@ class Snake(var position: Vector2 = Vector2(),
     }
 
     private fun checkForOutOfBounds() {
-        if (position.x >= graphics.width) position.x = 0f
-        if (position.x < 0) position.x = graphics.width - SNAKE_MOVEMENT
-        if (position.y >= graphics.height) position.y = 0f
-        if (position.y < 0) position.y = graphics.height - SNAKE_MOVEMENT
+        if (position.x >= viewport.worldWidth) position.x = 0f
+        if (position.x < 0) position.x = viewport.worldWidth - SNAKE_MOVEMENT
+        if (position.y >= viewport.worldHeight) position.y = 0f
+        if (position.y < 0) position.y = viewport.worldHeight - SNAKE_MOVEMENT
     }
 
     private fun checkSnakeBodyCollision() {

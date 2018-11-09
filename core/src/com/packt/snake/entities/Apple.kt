@@ -1,16 +1,17 @@
 package com.packt.snake.entities
 
-import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.MathUtils.random
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.packt.snake.utils.Constants.Companion.APPLE
 import com.packt.snake.utils.Constants.Companion.SNAKE_MOVEMENT
 
 class Apple(val position: Vector2 = Vector2(),
             var appleAvailable: Boolean = false,
-            private var snake: Snake) {
+            private var snake: Snake,
+            private val viewport: FitViewport) {
 
     fun update(snake: Snake) {
         if (snake.position == position) appleAvailable = false
@@ -25,9 +26,9 @@ class Apple(val position: Vector2 = Vector2(),
         if (!appleAvailable) {
             do {
                 position.x = MathUtils.round(
-                        random(graphics.width / SNAKE_MOVEMENT - 1)) * SNAKE_MOVEMENT
+                        random(viewport.worldWidth / SNAKE_MOVEMENT - 1)) * SNAKE_MOVEMENT
                 position.y = MathUtils.round(
-                        random(graphics.height / SNAKE_MOVEMENT - 1)) * SNAKE_MOVEMENT
+                        random(viewport.worldHeight / SNAKE_MOVEMENT - 1)) * SNAKE_MOVEMENT
                 appleAvailable = true
             } while (position == snake.position || inSnake(snake, position))
         }
